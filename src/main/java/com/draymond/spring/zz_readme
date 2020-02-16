@@ -1,0 +1,16 @@
+spring
+    1：注解开发
+        1.1：xml方法注册组件
+            ComponentScan自定义扫描的包，让spring管理
+        1.2：@Scope
+            作用范围
+                prototype,多实例
+                singletype,单实例（默认，ioc默认实例一个对象）
+
+
+    2：
+    3：
+    4：
+    5：
+    6：
+    7：

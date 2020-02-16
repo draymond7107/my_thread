@@ -1,0 +1,117 @@
+1:线程的生命周期
+        https://www.cnblogs.com/keessi/p/7444263.html
+    新建（New）
+        new Thread(); 当程序使用new关键字创建一个线程的后，该线程就是“新建”状态；此时，它与其他的java对象一样，仅仅由java虚拟机
+        为其分配了内存，并初始化了其成员变量值。此时的线程对象没有表现出热恩和的线程的动态特征，程序也不会执行
+    就绪（Runnable）
+        thread.start();当程序调用start()方法，该线程处于就绪状态，java虚拟机会为其创建“方法调用栈与程序计数器”；该状态的线程并
+        没有开始运行，而是表示该线程可以运行了，至于线程何时运行，取决于JVM中的线程调度器的调度
+    运行（Running）
+        处于就绪的线程获取到CPU的执行权，开始执行run()方法的执行体；
+        运行-->>阻塞Blocked
+            线程调用sleep方法主动放弃所占用的处理器资源
+            线程调用一个阻塞式的IO方法，在该方法返回之前，线程阻塞
+            尝试获取一个同步监视器，但该同步监视器正被其他线程锁持有
+            线程正在等待某个通知notify
+            线程调用了suspend方法将线程挂起（容易导致死锁）
+    阻塞（Blocked）
+        阻塞Blocked-->>就绪Runnable
+              线程调用sleep方法并指定时间
+              线程调用阻塞式的IO方法已经返回
+              线程获取了试图获取的同步监视器
+              线程等待notify时，其他线程发出了
+    死亡（Dead）
+        run()方法执行完毕
+        抛出一个未捕获的Exeception或Error
+        调用stop()方法
+
+2:start源码分析
+    线程不知道要执行的业务逻辑，所以抽象除了run()方法执行体，如果重写了run()，则执行重写的方法，没有重写，则执行原有的run()方法（该方法没有具体的执行体）
+
+3:stackSize
+     构造Thread的时候，传入stackSize代表这该线程占用stack的大小，如果美亚由指定stackSize的大小，默认是0，0代表这会忽略该参数。该参数会被JNI函数（虚拟机函数）去使用
+     需要注意：该参数有一些平台有效，一些无效(不用显式的设置)
+
+4：Daemon线程
+   当只有Daemon线程的时候，JVM会退出；（其他的非Daemon线程全部关闭的时候，Daemon线程也会关闭）
+
+    
+5：tid
+
+6：priority  优先级
+    优先级越高获取cpu的执行权的可能性越高(并不是高的有心计一定比低的执行的早)
+
+7：join 当前线程等待join的线程执行结束后(有时间参数依据时间)，再执行
+          thread.join()
+            当前线程:   执行thread.join() 的线程
+            join的线程：thread线程
+
+8：Interrupt  仅仅是将thread线程标记为中断
+        thread.interrupt()
+        当前线程标记thread线程为中断状态,是否终止，需要thread线程自己决定
+            8.1：标记thread为中断状态(_10Interrupt thread2)
+                8.1.1：thread处于阻塞状态，并try阻塞部分
+                    可以捕获到InterruptException异常，是否终止需要thread自己决定
+                    捕获异常后，将本线程的中断标记置为false
+
+                8.1.2:thread没有阻塞(_10Interrupt thread1)
+                    只是将thread线程标记为中断状态
+                    如果需要依据中断标记处理，可以通过查询当前线程的是否有中断标记
+
+
+
+        当thread处于阻塞（sleep,join,wait）状态,并且thread被标记为interrupt状态，此时，thread会收到一个 InterruptedException异常；该线程可以接收异常做下一步处理
+
+9：Synchronized
+    9.1：作用
+        加锁部分串行化运行
+    9.2：同步代码块与同步方法的区别？
+        同步方法使用的锁为this
+        加锁的位置的区别，同步方法是整体方法的加锁，同步代码块是方法中的代码局部加锁(如果同步代码块的作用域为整体代码，功能与同步方法一致)
+
+10:显式锁
+    自定义锁    com.draymond.thread._03explicit.LockTest
+        状态
+        加锁
+        释放锁
+
+
+11:sleep与wait的区别
+    11.1 使用对象区别
+        sleep的调用者是Thread，wait的调用者是所有实例对象
+    11.2 使用位置的区别
+        sleep在任何位置都能使用，而wait/notify/notifyAll需要在"synchronized"同步代码块中使用(wait需要一个监视器monitor)
+    11.3 wait方法释放锁(如果线程拥有某个或某些对象的同步锁，那么在调用了wait()后，这个线程就会释放它持有的所有同步资源，而不限于这个被调用了wait()方法的对象。wait()方法也同样会在wait的过程中有可能被其他对象调用interrupt()方法而产生  )，而sleep方法不释放锁(sleep与锁没有关系)
+
+
+12：
+
+
+
+
+
+
+
+
+java的内存模型
+    堆
+    栈
+    方法区
+        栈方法区
+        内部方法区
+    寄存器
+
+
+问题：
+    阻塞（Blocked）状态会消耗cpu吗
+
+启动JVM的时候，虚拟机栈的大小就确定了。
+
+Java应用程序的main函数时一个线程，是被JVM启动的时候调用，线程的名字叫main
+
+多线程安全问题出现的三要素
+    1.是否是多线程环境。
+​	2.是否有共享数据。
+​	3.是否有多条语句操作共享数据。
+
+

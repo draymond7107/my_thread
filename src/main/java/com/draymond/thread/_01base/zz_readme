@@ -1,0 +1,87 @@
+多线程
+    1   基础
+        线程状态
+            新建状态 New：线程对象创建时，进入新建状态 Thread thread=new Thread();
+            就绪状态 Runnable：“可执行状态”，其他线程调用该对象的start()方法，使线程处于就绪状态，随时被cpu执行
+            运行状态 Running：线程获取cou执行权限，线程仅仅是从就绪状态到运行状态
+            阻塞状态 Blocked: 线程失去对该cpu的执行权限，暂停运行，直到进入就绪状态才有机会进入运行状态
+                等待阻塞--通过调用线程wait()，让线程等待某工作的完成
+                同步阻塞--再线程获取同步锁synchronized失败（锁被占用），进入同步等待状态
+                其他阻塞--调用sleep()或join()或发生I/O操作，该线程被阻塞，当sleep()超时，join()等待线程终止或超时，或I/O处理完，线程转到就绪状态
+            死亡状态 Dead:线程执行完或异常退出了Run()方法，线程结束生命周期
+
+        Object
+            wait()
+            notify()
+            notifyAll()等休眠与唤醒函数
+        Thread
+           sleep（）
+           interrupt()
+           getName()
+        Synchronized    同步锁
+
+    2   使用Runnable方式，如果每个new Thread(Runnable)的参数是同一个，则多个线程对相同的资源做处理（相当于，多个人轮流干一个活）
+        使用Thread方式，每个new Thread()都是要分配一块资源，（相当于，每个人做相同的活，但不是同一个活）
+            备注：如果让Runnable也不共享资源，new 多个Runnable（），每个Thread传不同的Runnable实例对象
+
+    3   start与run方法区别
+            start():启动一个新的线程，新线程会自动调用run()方法，start()不能重复调用
+            run():  与普通的方法类似，直接调用则不会创建新的线程
+
+    4   synchronized怎么实现锁住代码块？
+
+    5   Thread与Runnable采用策略模式，Thread相同，而Runnable的实现不同
+
+    6   Thread继承类与Runnable实现类都有，则运行Thread的实现里的run()方法
+
+    7   Thread与ThreadGroup
+           new Thread 如果没有传ThreadGroup,则使用启动该线程的线程组 ThreadGroup,后期可以使用api查看该ThreadGroup里面的线程数量
+
+    8   多线程、JVM内存、虚拟机栈
+
+    9   stackSize   线程栈的大小
+        依赖于平台，
+
+    10  Runnable 是执行单元，而不是线程，把线程的控制部分与业务部分分开
+
+    11  线程组
+            对同一组的线程做批处理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
