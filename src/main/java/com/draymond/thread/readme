@@ -108,6 +108,11 @@
     // min<=active<=max
 
 
+    线程参数要素(分组+名字+状态)
+    开启多个线程
+    提交执行体(thread空闲时wait,runnable提交后，激活wait的线程，执行代码)
+
+15：
 
 
 
