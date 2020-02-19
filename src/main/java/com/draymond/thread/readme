@@ -112,11 +112,66 @@
     开启多个线程
     提交执行体(thread空闲时wait,runnable提交后，激活wait的线程，执行代码)
 
-15：
+15：单例模式
 
+16：waitSet
+    调用wait的时候，存放的线程;(线程休息室)
+    每个类都有一个waitSet
 
+17：volatile
+     1:内存可见性
+     2:代码执行顺序
 
+18:
+    内存：
+    RAM:随机存取存储器(英语：Random Access Memory)
+        所有的计算，运算放到cpu的寄存器；所有语言的程序，都是给cpu发送汇编指令；
+    ROM:只读；供系统加载，不会改变(嵌入式可能用到，java程序不会用到(我是没有用到过))
 
+19：多线程的三要素
+    原子性
+        所有的操作要么成功，要么失败，不能中间中止
+    可见性
+        对于共享变量，有一个线程修改了其值，其他线程也能看到，使用的也是最新的值
+    有序性
+        代码按照顺序执行(只要求最终一致性)(不影响单线程的最终一致性，但会影响多线程的一致性)
+        {
+        int i=0;
+        boolean b=false;
+        i=1;
+        b=true;
+        }
+
+        {
+        int i=0;
+         i=1;
+        boolean b=false;
+        b=true;
+        }
+        两个代码执行的结果是一样的，因此可能会重排序
+
+        Thread1---
+        obj=createObj();
+        init =true;
+
+        Thread2----
+        while(!init){
+        sleep(1000);
+        }
+        useObj()
+
+        Thread1由于指令重排，先init再createObj()时，当T和read1执行到init=true;Thread2获取到cpu执行权，while通过，调用userObj就会出现空指针异常
+
+20：有序性
+    happens-before relationship
+    单线程下，编写在前面的代码优先于后面的代码执行
+    unlock发生在lock后
+    volatile修饰的变量，写操作优先于读操作(多线程条件，既有read又有write,先write保存到cache-> main memory ；read再从main memory中读取)
+    传递规则:A优先于B，B优先于C，则A优先于C
+    线程中断规则，interrupt动作，必须发生在捕获动作之前(先有中断，才能捕获中断)
+    对象销毁规则，初始化必须发生在finalize之前
+    线程启动规则，start优先于run方法执行
+    线程终结规则，所有的操作发生在线程dead之前
 
 java的内存模型
     堆

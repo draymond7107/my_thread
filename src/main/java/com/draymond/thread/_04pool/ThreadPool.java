@@ -26,7 +26,18 @@ public class ThreadPool extends Thread {
 
     @Override
     public void run() {
+        init();
+        while (true) {
+            int taskQueueSize = TASK_QUEUE.size();
+            if (taskQueueSize > max && size < max) {
+                int addSize = max - size;
+                for (int i = 0; i < addSize; i++) {
+                    createWorkTask();
+                }
+            } else if (taskQueueSize > active && taskQueueSize < max) {
 
+            }
+        }
     }
 
     public boolean isDestory() {
@@ -58,23 +69,25 @@ public class ThreadPool extends Thread {
 
 
     public ThreadPool() {
-        this(DEFAULT_SIZE, DEFAULT_TASK_QUEUE, () -> {
+        this(4, 8, 12, DEFAULT_TASK_QUEUE, () -> {
             throw new DiscardException("runnable数量超过限制");
         });
     }
 
-    public ThreadPool(int size, int queueSize, DiscardPolicy discardPolicy) {
-        this.size = size;
+    public ThreadPool(int min, int active, int max, int queueSize, DiscardPolicy discardPolicy) {
+        this.size = min;
+        this.min = min;
+        this.active = active;
+        this.max = max;
         this.queueSize = queueSize;
         this.discardPolicy = discardPolicy;
-        init();
     }
 
     /**
      * 构建线程池
      */
     private void init() {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < min; i++) {
             createWorkTask();
         }
 
@@ -187,6 +200,7 @@ public class ThreadPool extends Thread {
     public static void main(String[] args) {
         //  ThreadPool threadPool = new ThreadPool(10, 20, ThreadPool.DEFAULT_DISCARD_POLICY);
         ThreadPool threadPool = new ThreadPool();
+        threadPool.start();
 
         new Thread(() -> {
             try {
