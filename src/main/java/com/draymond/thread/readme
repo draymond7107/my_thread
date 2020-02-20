@@ -113,6 +113,7 @@
     提交执行体(thread空闲时wait,runnable提交后，激活wait的线程，执行代码)
 
 15：单例模式
+    com.draymond.thread._05design._01single
 
 16：waitSet
     调用wait的时候，存放的线程;(线程休息室)
@@ -120,7 +121,11 @@
 
 17：volatile
      1:内存可见性
+        强制对缓存的修改立刻写入主存
+        如果是写操作，会导致其他cpu的缓存失效
      2:代码执行顺序
+        保证重排的顺序不会把后面的指令放到屏障的前面，也不会把前面的放到后面
+
 
 18:
     内存：
@@ -172,6 +177,22 @@
     对象销毁规则，初始化必须发生在finalize之前
     线程启动规则，start优先于run方法执行
     线程终结规则，所有的操作发生在线程dead之前
+
+21：观察者模型
+            https://www.jianshu.com/p/186a0041ac5b
+        观察者模式（Observe Pattern）的正经定义：定义对象之间的一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新
+        别名：发布-订阅模式、模型-视图模式、源-监听器模式以及从属者模式
+
+            com.draymond.thread._05design._02observer.observer01
+            com.draymond.thread._05design._02observer.observer02
+                observer01与observer02一样(observer02是仿写observer01)
+
+            com.draymond.thread._05design._02observer.observer03
+                观察线程的生命周期
+
+
+
+
 
 java的内存模型
     堆

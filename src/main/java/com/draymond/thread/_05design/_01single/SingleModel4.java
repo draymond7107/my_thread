@@ -1,4 +1,4 @@
-package com.draymond.thread._05design.single;
+package com.draymond.thread._05design._01single;
 
 /**
  * 静态内部类模式

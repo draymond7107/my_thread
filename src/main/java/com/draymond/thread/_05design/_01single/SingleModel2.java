@@ -1,4 +1,4 @@
-package com.draymond.thread._05design.single;
+package com.draymond.thread._05design._01single;
 
 /**
  * 单例模式：懒汉式加载
